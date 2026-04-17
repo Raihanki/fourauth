@@ -1,0 +1,21 @@
+*.exe
+*.so
+*.dylib
+*.out
+
+go.work
+go.work.sum
+
+# Test binary
+*.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+# Build output
+bin/
