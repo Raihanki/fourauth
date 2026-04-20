@@ -23,6 +23,7 @@ import (
 	"net/http"
 
 	"github.com/Raihanki/fourauth/csrf"
+	"github.com/Raihanki/fourauth/handler"
 	handlerpkg "github.com/Raihanki/fourauth/handler"
 	middlewarepkg "github.com/Raihanki/fourauth/middleware"
 	"github.com/Raihanki/fourauth/service"
@@ -30,9 +31,12 @@ import (
 
 // Auth provides authentication functionality and handlers.
 type Auth struct {
-	service    *service.Service
-	middleware *middlewarepkg.AuthMiddleware
-	csrf       *csrf.Manager
+	service        *service.Service
+	middleware     *middlewarepkg.AuthMiddleware
+	csrf           *csrf.Manager
+	googleHandler  *handlerpkg.GoogleHandler
+	localHandler   *handlerpkg.LocalHandler
+	refreshHandler *handler.RefreshHandler
 }
 
 // New creates a new Auth instance with the given options.
@@ -61,6 +65,22 @@ func New(opts ...Option) (*Auth, error) {
 		o.googleProvider,
 	)
 
+	googleHandler := &handlerpkg.GoogleHandler{
+		Service:   svc,
+		State:     o.googleState,
+		Transport: o.transport,
+	}
+
+	localHandler := &handlerpkg.LocalHandler{
+		Service:   svc,
+		Transport: o.transport,
+	}
+
+	refreshHandler := &handler.RefreshHandler{
+		Service:   svc,
+		Transport: o.transport,
+	}
+
 	return &Auth{
 		service: svc,
 		csrf:    o.csrfManager,
@@ -69,6 +89,9 @@ func New(opts ...Option) (*Auth, error) {
 			Issuer:    o.issuer,
 			Transport: o.transport,
 		},
+		googleHandler:  googleHandler,
+		localHandler:   localHandler,
+		refreshHandler: refreshHandler,
 	}, nil
 }
 
@@ -76,32 +99,4 @@ func New(opts ...Option) (*Auth, error) {
 // and allows authenticated users to proceed to the next handler.
 func (a *Auth) RequireAuth(next http.Handler) http.Handler {
 	return a.middleware.RequireAuth(next)
-}
-
-// CSRFHandler returns a handler that generates and sets CSRF tokens.
-// Returns 404 if CSRF is not enabled.
-func (a *Auth) CSRFHandler() http.HandlerFunc {
-	if a.csrf == nil {
-		return func(w http.ResponseWriter, r *http.Request) {
-			http.Error(w, "csrf is not enabled", http.StatusNotFound)
-		}
-	}
-	return csrf.Handler(a.csrf)
-}
-
-// CSRFMiddleware returns middleware that validates CSRF tokens on stateful requests.
-// Returns a no-op middleware if CSRF is not enabled.
-func (a *Auth) CSRFMiddleware() func(http.Handler) http.Handler {
-	if a.csrf == nil {
-		return func(next http.Handler) http.Handler {
-			return next
-		}
-	}
-	return csrf.Protect(a.csrf)
-}
-
-// MeHandler returns a handler that returns the currently authenticated user.
-// Returns user data as JSON with fields: id, email, name, role, avatar_url, provider.
-func (a *Auth) MeHandler() http.HandlerFunc {
-	return handlerpkg.Me
 }
