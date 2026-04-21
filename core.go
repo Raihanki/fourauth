@@ -102,6 +102,14 @@ func NewBearerConfig(refreshBodyField string) BearerConfig {
 	}
 }
 
+func NewTokenConfig(issuer string, accessTokenTTL, refreshTokenTTL time.Duration) TokenConfig {
+	return TokenConfig{
+		Issuer:          issuer,
+		AccessTokenTTL:  accessTokenTTL,
+		RefreshTokenTTL: refreshTokenTTL,
+	}
+}
+
 func NewGoogleConfig(clientID, clientSecret, redirectURL string) GoogleConfig {
 	return GoogleConfig{
 		ClientID:     clientID,
