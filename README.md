@@ -33,9 +33,7 @@ fourauth is designed to be:
 ---
 
 # 🚧 Status
-⚠️ This project is currently in MVP stage.
-
-Expect changes and improvements.
+⚠️ fourauth is currently in early development (`v0.x`) and may introduce breaking changes before `v1.0.0`.
 
 # 🚀 Installation
 
