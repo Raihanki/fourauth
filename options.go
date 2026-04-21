@@ -137,6 +137,7 @@ func WithLocalProvider(p *localprovider.Provider) Option {
 func WithGoogleAuth(cfg core.GoogleConfig) Option {
 	return func(o *options) error {
 		o.googleCfg = &cfg
+		o.enableGoogle = true
 		return nil
 	}
 }

@@ -43,14 +43,14 @@ func (a *Auth) GoogleCallbackHandler() http.HandlerFunc {
 	return a.googleHandler.Callback
 }
 
-func (a *Auth) localRegisterHandler() http.HandlerFunc {
+func (a *Auth) LocalRegisterHandler() http.HandlerFunc {
 	return a.localHandler.Register
 }
 
-func (a *Auth) localLoginHandler() http.HandlerFunc {
+func (a *Auth) LocalLoginHandler() http.HandlerFunc {
 	return a.localHandler.Login
 }
 
-func (a *Auth) refreshTokenHandler() http.HandlerFunc {
+func (a *Auth) RefreshTokenHandler() http.HandlerFunc {
 	return a.refreshHandler.Handle
 }
