@@ -31,12 +31,13 @@ import (
 
 // Auth provides authentication functionality and handlers.
 type Auth struct {
-	service        *service.Service
-	middleware     *middlewarepkg.AuthMiddleware
-	csrf           *csrf.Manager
-	googleHandler  *handlerpkg.GoogleHandler
-	localHandler   *handlerpkg.LocalHandler
-	refreshHandler *handler.RefreshHandler
+	service         *service.Service
+	middleware      *middlewarepkg.AuthMiddleware
+	csrf            *csrf.Manager
+	googleHandler   *handlerpkg.GoogleHandler
+	localHandler    *handlerpkg.LocalHandler
+	refreshHandler  *handler.RefreshHandler
+	useRefreshToken bool
 }
 
 // New creates a new Auth instance with the given options.
@@ -63,6 +64,7 @@ func New(opts ...Option) (*Auth, error) {
 		o.csrfManager,
 		o.localProvider,
 		o.googleProvider,
+		o.enableRefreshToken,
 	)
 
 	googleHandler := &handlerpkg.GoogleHandler{
@@ -89,9 +91,10 @@ func New(opts ...Option) (*Auth, error) {
 			Issuer:    o.issuer,
 			Transport: o.transport,
 		},
-		googleHandler:  googleHandler,
-		localHandler:   localHandler,
-		refreshHandler: refreshHandler,
+		googleHandler:   googleHandler,
+		localHandler:    localHandler,
+		refreshHandler:  refreshHandler,
+		useRefreshToken: o.enableRefreshToken,
 	}, nil
 }
 

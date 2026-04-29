@@ -22,7 +22,8 @@ func TestService_issueTokenPair(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			issuer: issuer,
+			issuer:          issuer,
+			useRefreshToken: true,
 		}
 
 		user := testUser{
@@ -59,7 +60,8 @@ func TestService_issueTokenPair(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			issuer: issuer,
+			issuer:          issuer,
+			useRefreshToken: true,
 		}
 
 		user := testUser{
@@ -104,7 +106,8 @@ func TestService_issueTokenPair(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			issuer: issuer,
+			issuer:          issuer,
+			useRefreshToken: true,
 		}
 
 		user := testUser{
@@ -145,6 +148,47 @@ func TestService_issueTokenPair(t *testing.T) {
 		assert.Equal(t, "refresh-token", got.RefreshToken.Value)
 
 		issuer.AssertExpectations(t)
+	})
+
+	t.Run("success without refresh token", func(t *testing.T) {
+		issuer := new(mocks.Issuer)
+
+		svc := &Service{
+			tokenCfg: &core.TokenConfig{
+				AccessTokenTTL:  15 * time.Minute,
+				RefreshTokenTTL: 24 * time.Hour,
+			},
+			issuer:          issuer,
+			useRefreshToken: false,
+		}
+
+		user := testUser{
+			id:    "user-1",
+			email: "user@example.com",
+			role:  "user",
+		}
+
+		issuer.
+			On("IssueAccessToken", mock.MatchedBy(func(c core.AccessClaims) bool {
+				return c.Subject == "user-1" &&
+					c.Email == "user@example.com" &&
+					c.Role == "user" &&
+					!c.ExpiresAt.IsZero()
+			})).
+			Return(core.Token{
+				Value:     "access-token",
+				ExpiredAt: time.Now().Add(15 * time.Minute),
+			}, nil).
+			Once()
+
+		got, err := svc.issueTokenPair(user)
+
+		require.NoError(t, err)
+		assert.Equal(t, "access-token", got.AccessToken.Value)
+		assert.Empty(t, got.RefreshToken.Value)
+
+		issuer.AssertExpectations(t)
+		issuer.AssertNotCalled(t, "IssueRefreshToken", mock.Anything)
 	})
 }
 

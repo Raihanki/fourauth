@@ -42,10 +42,11 @@ func TestService_Register_Success(t *testing.T) {
 			AccessTokenTTL:  time.Minute,
 			RefreshTokenTTL: time.Hour,
 		},
-		repo:        repo,
-		refreshRepo: refreshRepo,
-		issuer:      issuer,
-		local:       local,
+		repo:            repo,
+		refreshRepo:     refreshRepo,
+		issuer:          issuer,
+		local:           local,
+		useRefreshToken: true,
 	}
 
 	ctx := context.Background()
@@ -71,11 +72,11 @@ func TestService_Register_Success(t *testing.T) {
 
 	// create user
 	repo.
-		On("Create", mock.Anything, mock.MatchedBy(func(in core.CreateUserInput) bool {
-			return in.Email == "user@example.com" &&
-				in.PasswordHash != nil &&
-				*in.PasswordHash == "hashed-password" &&
-				in.Provider == string(core.ProviderLocal)
+		On("Create", mock.Anything, mock.MatchedBy(func(in core.UserInput) bool {
+			return in.GetEmail() == "user@example.com" &&
+				in.GetPasswordHash() != nil &&
+				*in.GetPasswordHash() == "hashed-password" &&
+				in.GetProvider() == string(core.ProviderLocal)
 		})).
 		Return(user, nil).
 		Once()

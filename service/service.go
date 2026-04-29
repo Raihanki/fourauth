@@ -15,15 +15,16 @@ import (
 
 // Service handles authentication operations.
 type Service struct {
-	tokenCfg    *core.TokenConfig
-	repo        core.UserRepository
-	refreshRepo core.RefreshTokenRepository
-	issuer      token.Issuer
-	transport   transport.Transport
-	csrf        *csrf.Manager
-	local       provider.PasswordProvider
-	google      provider.ExternalProvider
-	googleState *google.StateStore
+	tokenCfg        *core.TokenConfig
+	repo            core.UserRepository
+	refreshRepo     core.RefreshTokenRepository
+	issuer          token.Issuer
+	transport       transport.Transport
+	csrf            *csrf.Manager
+	local           provider.PasswordProvider
+	google          provider.ExternalProvider
+	googleState     *google.StateStore
+	useRefreshToken bool
 }
 
 // New creates a new Service with the given configuration.
@@ -36,15 +37,17 @@ func New(
 	csrf *csrf.Manager,
 	localProv provider.PasswordProvider,
 	googleProv provider.ExternalProvider,
+	useRefreshToken bool,
 ) *Service {
 	return &Service{
-		tokenCfg:    tokenCfg,
-		repo:        repo,
-		refreshRepo: refreshRepo,
-		issuer:      issuer,
-		transport:   transport,
-		csrf:        csrf,
-		local:       localProv,
-		google:      googleProv,
+		tokenCfg:        tokenCfg,
+		repo:            repo,
+		refreshRepo:     refreshRepo,
+		issuer:          issuer,
+		transport:       transport,
+		csrf:            csrf,
+		local:           localProv,
+		google:          googleProv,
+		useRefreshToken: useRefreshToken,
 	}
 }

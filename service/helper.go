@@ -19,6 +19,10 @@ func (s *Service) issueTokenPair(user core.User) (core.TokenPair, error) {
 		return core.TokenPair{}, err
 	}
 
+	if !s.useRefreshToken {
+		return core.TokenPair{AccessToken: access}, nil
+	}
+
 	refreshID, err := randomTokenID()
 	if err != nil {
 		return core.TokenPair{}, err

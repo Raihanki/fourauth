@@ -46,3 +46,6 @@ var ErrUnsupportedClear = errors.New("transport does not support clearing state"
 
 // ErrMissingAuthorizationHeader is returned when Authorization header is expected but missing.
 var ErrMissingAuthorizationHeader = errors.New("missing authorization header")
+
+// ErrRefreshTokenDisabled is returned when refresh tokens are not enabled.
+var ErrRefreshTokenDisabled = errors.New("refresh tokens are disabled")

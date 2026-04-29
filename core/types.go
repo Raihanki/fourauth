@@ -54,18 +54,6 @@ type ExternalIdentity struct {
 	EmailVerified bool
 }
 
-// CreateUserInput contains the data needed to create a new user.
-type CreateUserInput struct {
-	Email         string
-	PasswordHash  *string
-	Provider      string
-	ProviderID    *string
-	Name          string
-	AvatarURL     *string
-	Role          string
-	EmailVerified bool
-}
-
 // RefreshTokenRecord represents a stored refresh token in the database.
 type RefreshTokenRecord struct {
 	TokenID   string

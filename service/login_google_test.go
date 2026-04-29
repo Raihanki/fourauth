@@ -18,7 +18,8 @@ func TestService_GoogleAuthURL(t *testing.T) {
 	google := new(mocks.GoogleProvider)
 
 	svc := &Service{
-		google: google,
+		google:          google,
+		useRefreshToken: true,
 	}
 
 	google.
@@ -48,9 +49,10 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:   repo,
-			issuer: issuer,
-			google: google,
+			repo:            repo,
+			issuer:          issuer,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		google.
@@ -78,9 +80,10 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:   repo,
-			issuer: issuer,
-			google: google,
+			repo:            repo,
+			issuer:          issuer,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		identity := core.ExternalIdentity{
@@ -161,9 +164,10 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:   repo,
-			issuer: issuer,
-			google: google,
+			repo:            repo,
+			issuer:          issuer,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		identity := core.ExternalIdentity{
@@ -217,9 +221,10 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:   repo,
-			issuer: issuer,
-			google: google,
+			repo:            repo,
+			issuer:          issuer,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		identity := core.ExternalIdentity{
@@ -276,9 +281,10 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:   repo,
-			issuer: issuer,
-			google: google,
+			repo:            repo,
+			issuer:          issuer,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		identity := core.ExternalIdentity{
@@ -316,17 +322,17 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 			Once()
 
 		repo.
-			On("Create", mock.Anything, mock.MatchedBy(func(in core.CreateUserInput) bool {
-				return in.Email == "user@example.com" &&
-					in.PasswordHash == nil &&
-					in.Provider == string(core.ProviderGoogle) &&
-					in.ProviderID != nil &&
-					*in.ProviderID == "google-123" &&
-					in.Name == "Gaou" &&
-					in.AvatarURL != nil &&
-					*in.AvatarURL == "https://example.com/avatar.png" &&
-					in.Role == "user" &&
-					in.EmailVerified
+			On("Create", mock.Anything, mock.MatchedBy(func(in core.UserInput) bool {
+				return in.GetEmail() == "user@example.com" &&
+					in.GetPasswordHash() == nil &&
+					in.GetProvider() == string(core.ProviderGoogle) &&
+					in.GetProviderID() != nil &&
+					*in.GetProviderID() == "google-123" &&
+					in.GetName() == "Gaou" &&
+					in.GetAvatarURL() != nil &&
+					*in.GetAvatarURL() == "https://example.com/avatar.png" &&
+					in.GetRole() == "user" &&
+					in.IsEmailVerified()
 			})).
 			Return(createdUser, nil).
 			Once()
@@ -380,9 +386,10 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:   repo,
-			issuer: issuer,
-			google: google,
+			repo:            repo,
+			issuer:          issuer,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		identity := core.ExternalIdentity{
@@ -438,9 +445,10 @@ func TestService_LoginGoogleCallback(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:   repo,
-			issuer: issuer,
-			google: google,
+			repo:            repo,
+			issuer:          issuer,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		identity := core.ExternalIdentity{

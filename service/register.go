@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Raihanki/fourauth/core"
+	"github.com/Raihanki/fourauth/model"
 )
 
 // RegisterInput contains the data needed to register a new local user.
@@ -27,7 +28,7 @@ func (s *Service) Register(ctx context.Context, in RegisterInput) (core.AuthResu
 		return core.AuthResult{}, err
 	}
 
-	user, err := s.repo.Create(ctx, core.CreateUserInput{
+	user, err := s.repo.Create(ctx, &model.BaseUserInput{
 		Email:         in.Email,
 		PasswordHash:  &hash,
 		Provider:      string(core.ProviderLocal),

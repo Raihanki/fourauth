@@ -29,11 +29,12 @@ func TestService_Refresh(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
-			google:      google,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		issuer.
@@ -65,11 +66,12 @@ func TestService_Refresh(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
-			google:      google,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		issuer.
@@ -109,11 +111,12 @@ func TestService_Refresh(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
-			google:      google,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		user := testUser{
@@ -168,11 +171,12 @@ func TestService_Refresh(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
-			google:      google,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		user := testUser{
@@ -238,11 +242,12 @@ func TestService_Refresh(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
-			google:      google,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			google:          google,
+			useRefreshToken: true,
 		}
 
 		user := testUser{
@@ -297,5 +302,35 @@ func TestService_Refresh(t *testing.T) {
 
 		issuer.AssertExpectations(t)
 		repo.AssertExpectations(t)
+	})
+
+	t.Run("refresh token disabled", func(t *testing.T) {
+		repo := new(mocks.UserRepository)
+		refreshRepo := new(mocks.RefreshTokenRepository)
+		issuer := new(mocks.Issuer)
+		local := new(mocks.LocalProvider)
+		google := new(mocks.GoogleProvider)
+
+		svc := &Service{
+			tokenCfg: &core.TokenConfig{
+				AccessTokenTTL:  15 * time.Minute,
+				RefreshTokenTTL: 24 * time.Hour,
+			},
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			google:          google,
+			useRefreshToken: false,
+		}
+
+		got, err := svc.Refresh(ctx, "valid-refresh-token")
+
+		require.Error(t, err)
+		assert.ErrorIs(t, err, core.ErrRefreshTokenDisabled)
+		assert.Equal(t, core.TokenPair{}, got)
+
+		issuer.AssertNotCalled(t, "ParseRefreshToken", mock.Anything)
+		repo.AssertNotCalled(t, "GetByID", mock.Anything, mock.Anything)
 	})
 }

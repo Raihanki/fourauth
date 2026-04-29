@@ -6,6 +6,7 @@ test/integrations/*
 
 go.work
 go.work.sum
+CONTEXT.md
 
 # Test binary
 *.test

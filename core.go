@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Raihanki/fourauth/core"
+	"github.com/Raihanki/fourauth/model"
 )
 
 func String(v string) *string {
@@ -49,8 +50,8 @@ func NewExternalIdentity(
 	}
 }
 
-func NewLocalUserInput(email, name, passwordHash, role string) CreateUserInput {
-	return CreateUserInput{
+func NewLocalUserInput(email, name, passwordHash, role string) core.UserInput {
+	return &model.BaseUserInput{
 		Email:        email,
 		Name:         name,
 		Provider:     string(ProviderLocal),
@@ -62,8 +63,8 @@ func NewLocalUserInput(email, name, passwordHash, role string) CreateUserInput {
 func NewGoogleUserInput(
 	email, name, providerID, avatarURL, role string,
 	emailVerified bool,
-) CreateUserInput {
-	return CreateUserInput{
+) core.UserInput {
+	return &model.BaseUserInput{
 		Email:         email,
 		Name:          name,
 		Provider:      string(ProviderGoogle),
