@@ -33,17 +33,18 @@ type options struct {
 	googleProvider provider.ExternalProvider
 	hasher         localprovider.Hasher
 
-	enableLocal  bool
-	enableGoogle bool
+	enableLocal        bool
+	enableGoogle       bool
 	enableRefreshToken bool
+	insecureCookies    bool
 }
 
 func defaultOptions() *options {
 	cookieCfg := core.DefaultCookieConfig()
 
 	return &options{
-		tokenCfg:  core.DefaultTokenConfig(),
-		cookieCfg: &cookieCfg,
+		tokenCfg:           core.DefaultTokenConfig(),
+		cookieCfg:          &cookieCfg,
 		enableRefreshToken: true,
 	}
 }
@@ -110,6 +111,16 @@ func WithCookieTransport(cfg ...core.CookieConfig) Option {
 func WithBearerTransport() Option {
 	return func(o *options) error {
 		o.transport = bearertransport.New()
+		return nil
+	}
+}
+
+// WithInsecureCookies disables Secure and HttpOnly flags on auth cookies.
+// This is useful for local development over HTTP (e.g. localhost).
+// NOT recommended for production use.
+func WithInsecureCookies() Option {
+	return func(o *options) error {
+		o.insecureCookies = true
 		return nil
 	}
 }
@@ -210,6 +221,19 @@ func finalizeOptions(o *options) error {
 		o.transport = cookietransport.New(*o.cookieCfg)
 	}
 
+	if o.insecureCookies {
+		if o.cookieCfg != nil {
+			o.cookieCfg.Secure = false
+			o.cookieCfg.HTTPOnly = false
+		}
+		if ct, ok := o.transport.(*cookietransport.Transport); ok {
+			ct.SetInsecure()
+		}
+		if o.googleState != nil {
+			o.googleState.SetInsecure()
+		}
+	}
+
 	if o.csrfManager == nil && o.transport.Kind() == core.TransportKindCookie {
 		o.csrfManager = csrf.NewManager(*o.cookieCfg)
 	}
@@ -226,6 +250,9 @@ func finalizeOptions(o *options) error {
 	if o.enableGoogle {
 		if o.googleState == nil {
 			o.googleState = googleprovider.NewState()
+		}
+		if o.insecureCookies {
+			o.googleState.SetInsecure()
 		}
 		if o.googleProvider == nil {
 			if o.googleCfg == nil {

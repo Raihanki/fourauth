@@ -80,6 +80,13 @@ func (t *Transport) Clear(w http.ResponseWriter) error {
 	return nil
 }
 
+// SetInsecure disables Secure and HttpOnly flags for development use.
+// Not recommended for production.
+func (t *Transport) SetInsecure() {
+	t.cfg.Secure = false
+	t.cfg.HTTPOnly = false
+}
+
 func (t *Transport) Kind() core.TransportKind {
 	return core.TransportKindCookie
 }

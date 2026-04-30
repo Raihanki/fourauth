@@ -164,6 +164,38 @@ func TestMaxAgeFrom(t *testing.T) {
 	})
 }
 
+func TestTransport_SetInsecure(t *testing.T) {
+	tr := newTestTransport(t)
+	tr.SetInsecure()
+
+	rr := httptest.NewRecorder()
+	accessExp := time.Now().Add(15 * time.Minute)
+	refreshExp := time.Now().Add(24 * time.Hour)
+
+	pair := core.TokenPair{
+		AccessToken: core.Token{
+			Value:     "access-value",
+			ExpiredAt: accessExp,
+		},
+		RefreshToken: core.Token{
+			Value:     "refresh-value",
+			ExpiredAt: refreshExp,
+		},
+	}
+
+	err := tr.WriteTokens(rr, pair)
+	require.NoError(t, err)
+
+	resp := rr.Result()
+	cookies := resp.Cookies()
+	require.Len(t, cookies, 2)
+
+	for _, c := range cookies {
+		assert.False(t, c.Secure, "cookie %s should not be Secure after SetInsecure", c.Name)
+		assert.False(t, c.HttpOnly, "cookie %s should not be HttpOnly after SetInsecure", c.Name)
+	}
+}
+
 func TestTransport_Kind(t *testing.T) {
 	tr := newTestTransport(t)
 	assert.Equal(t, core.TransportKindCookie, tr.Kind())
