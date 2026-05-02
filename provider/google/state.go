@@ -74,6 +74,12 @@ func (s *StateStore) Verify(r *http.Request, state string) error {
 	return nil
 }
 
+// SetInsecure disables the Secure flag for development use.
+// Not recommended for production.
+func (s *StateStore) SetInsecure() {
+	s.Secure = false
+}
+
 // Clear removes the state cookie.
 func (s *StateStore) Clear(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{

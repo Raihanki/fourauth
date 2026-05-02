@@ -101,6 +101,13 @@ fourauth.WithCookieTransport()
 - Uses cookies for tokens
 - CSRF protection is automatically enabled
 
+##### Insecure Cookies (Development Only)
+For local development over HTTP (e.g. `localhost`), you can disable `Secure` and `HttpOnly` cookie flags:
+```go
+fourauth.WithInsecureCookies()
+```
+> ⚠️ **NOT recommended for production.** Only use this during local development.
+
 #### Bearer (API mode)
 ```go
 fourauth.WithBearerTransport()
