@@ -24,7 +24,7 @@ func (s *Service) LoginGoogleCallback(ctx context.Context, code string) (core.Au
 
 	user, err := s.repo.GetByProvider(ctx, identity.Provider, identity.ProviderID)
 	if err == nil {
-		pair, err := s.issueTokenPair(user)
+		pair, err := s.IssueTokenPair(user)
 		if err != nil {
 			return core.AuthResult{}, err
 		}
@@ -52,7 +52,7 @@ func (s *Service) LoginGoogleCallback(ctx context.Context, code string) (core.Au
 		return core.AuthResult{}, err
 	}
 
-	pair, err := s.issueTokenPair(user)
+	pair, err := s.IssueTokenPair(user)
 	if err != nil {
 		return core.AuthResult{}, err
 	}
@@ -70,7 +70,7 @@ func (s *Service) UserFromToken(ctx context.Context, token string) (core.AuthRes
 
 	user, err := s.repo.GetByProvider(ctx, identity.Provider, identity.ProviderID)
 	if err == nil {
-		pair, err := s.issueTokenPair(user)
+		pair, err := s.IssueTokenPair(user)
 		if err != nil {
 			return core.AuthResult{}, err
 		}
@@ -98,7 +98,7 @@ func (s *Service) UserFromToken(ctx context.Context, token string) (core.AuthRes
 		return core.AuthResult{}, err
 	}
 
-	pair, err := s.issueTokenPair(user)
+	pair, err := s.IssueTokenPair(user)
 	if err != nil {
 		return core.AuthResult{}, err
 	}

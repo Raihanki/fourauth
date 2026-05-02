@@ -23,7 +23,7 @@ func (s *Service) LoginLocal(ctx context.Context, email, password string) (core.
 		return core.AuthResult{}, core.ErrInvalidCreds
 	}
 
-	pair, err := s.issueTokenPair(user)
+	pair, err := s.IssueTokenPair(user)
 	if err != nil {
 		return core.AuthResult{}, err
 	}

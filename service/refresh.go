@@ -24,5 +24,5 @@ func (s *Service) Refresh(ctx context.Context, rawRefresh string) (core.TokenPai
 		return core.TokenPair{}, core.ErrUnauthorized
 	}
 
-	return s.issueTokenPair(user)
+	return s.IssueTokenPair(user)
 }

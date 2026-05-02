@@ -8,7 +8,7 @@ import (
 	"github.com/Raihanki/fourauth/core"
 )
 
-func (s *Service) issueTokenPair(user core.User) (core.TokenPair, error) {
+func (s *Service) IssueTokenPair(user core.User) (core.TokenPair, error) {
 	access, err := s.issuer.IssueAccessToken(core.AccessClaims{
 		Subject:   user.GetID(),
 		Email:     user.GetEmail(),

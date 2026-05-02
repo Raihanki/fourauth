@@ -40,7 +40,7 @@ func (s *Service) Register(ctx context.Context, in RegisterInput) (core.AuthResu
 		return core.AuthResult{}, err
 	}
 
-	pair, err := s.issueTokenPair(user)
+	pair, err := s.IssueTokenPair(user)
 	if err != nil {
 		return core.AuthResult{}, err
 	}

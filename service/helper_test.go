@@ -42,7 +42,7 @@ func TestService_issueTokenPair(t *testing.T) {
 			Return(core.Token{}, errors.New("issue access failed")).
 			Once()
 
-		got, err := svc.issueTokenPair(user)
+		got, err := svc.IssueTokenPair(user)
 
 		require.Error(t, err)
 		assert.EqualError(t, err, "issue access failed")
@@ -89,7 +89,7 @@ func TestService_issueTokenPair(t *testing.T) {
 			Return(core.Token{}, errors.New("issue refresh failed")).
 			Once()
 
-		got, err := svc.issueTokenPair(user)
+		got, err := svc.IssueTokenPair(user)
 
 		require.Error(t, err)
 		assert.EqualError(t, err, "issue refresh failed")
@@ -141,7 +141,7 @@ func TestService_issueTokenPair(t *testing.T) {
 			}, nil).
 			Once()
 
-		got, err := svc.issueTokenPair(user)
+		got, err := svc.IssueTokenPair(user)
 
 		require.NoError(t, err)
 		assert.Equal(t, "access-token", got.AccessToken.Value)
@@ -181,7 +181,7 @@ func TestService_issueTokenPair(t *testing.T) {
 			}, nil).
 			Once()
 
-		got, err := svc.issueTokenPair(user)
+		got, err := svc.IssueTokenPair(user)
 
 		require.NoError(t, err)
 		assert.Equal(t, "access-token", got.AccessToken.Value)
