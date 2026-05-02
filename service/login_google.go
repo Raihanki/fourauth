@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Raihanki/fourauth/core"
+	"github.com/Raihanki/fourauth/model"
 )
 
 // GoogleAuthURL returns the Google OAuth2 authorization URL.
@@ -23,7 +24,7 @@ func (s *Service) LoginGoogleCallback(ctx context.Context, code string) (core.Au
 
 	user, err := s.repo.GetByProvider(ctx, identity.Provider, identity.ProviderID)
 	if err == nil {
-		pair, err := s.issueTokenPair(user)
+		pair, err := s.IssueTokenPair(user)
 		if err != nil {
 			return core.AuthResult{}, err
 		}
@@ -37,7 +38,7 @@ func (s *Service) LoginGoogleCallback(ctx context.Context, code string) (core.Au
 
 	avatar := identity.AvatarURL
 	providerID := identity.ProviderID
-	user, err = s.repo.Create(ctx, core.CreateUserInput{
+	user, err = s.repo.Create(ctx, &model.BaseUserInput{
 		Email:         identity.Email,
 		PasswordHash:  nil,
 		Provider:      identity.Provider,
@@ -51,7 +52,7 @@ func (s *Service) LoginGoogleCallback(ctx context.Context, code string) (core.Au
 		return core.AuthResult{}, err
 	}
 
-	pair, err := s.issueTokenPair(user)
+	pair, err := s.IssueTokenPair(user)
 	if err != nil {
 		return core.AuthResult{}, err
 	}
@@ -69,7 +70,7 @@ func (s *Service) UserFromToken(ctx context.Context, token string) (core.AuthRes
 
 	user, err := s.repo.GetByProvider(ctx, identity.Provider, identity.ProviderID)
 	if err == nil {
-		pair, err := s.issueTokenPair(user)
+		pair, err := s.IssueTokenPair(user)
 		if err != nil {
 			return core.AuthResult{}, err
 		}
@@ -83,7 +84,7 @@ func (s *Service) UserFromToken(ctx context.Context, token string) (core.AuthRes
 
 	avatar := identity.AvatarURL
 	providerID := identity.ProviderID
-	user, err = s.repo.Create(ctx, core.CreateUserInput{
+	user, err = s.repo.Create(ctx, &model.BaseUserInput{
 		Email:         identity.Email,
 		PasswordHash:  nil,
 		Provider:      identity.Provider,
@@ -97,7 +98,7 @@ func (s *Service) UserFromToken(ctx context.Context, token string) (core.AuthRes
 		return core.AuthResult{}, err
 	}
 
-	pair, err := s.issueTokenPair(user)
+	pair, err := s.IssueTokenPair(user)
 	if err != nil {
 		return core.AuthResult{}, err
 	}

@@ -52,5 +52,10 @@ func (a *Auth) LocalLoginHandler() http.HandlerFunc {
 }
 
 func (a *Auth) RefreshTokenHandler() http.HandlerFunc {
+	if !a.useRefreshToken {
+		return func(w http.ResponseWriter, r *http.Request) {
+			http.Error(w, "refresh tokens are disabled", http.StatusNotFound)
+		}
+	}
 	return a.refreshHandler.Handle
 }

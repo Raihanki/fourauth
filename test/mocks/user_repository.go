@@ -32,7 +32,7 @@ func (m *UserRepository) GetByProvider(ctx context.Context, provider string, pro
 	return user, args.Error(1)
 }
 
-func (m *UserRepository) Create(ctx context.Context, input core.CreateUserInput) (core.User, error) {
+func (m *UserRepository) Create(ctx context.Context, input core.UserInput) (core.User, error) {
 	args := m.Called(ctx, input)
 
 	user, _ := args.Get(0).(core.User)

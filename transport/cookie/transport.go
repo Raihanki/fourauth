@@ -31,17 +31,19 @@ func (t *Transport) WriteTokens(w http.ResponseWriter, pair core.TokenPair) erro
 		MaxAge:   maxAgeFrom(pair.AccessToken.ExpiredAt),
 	})
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     t.cfg.RefreshCookieName,
-		Value:    pair.RefreshToken.Value,
-		Path:     t.cfg.Path,
-		Domain:   t.cfg.Domain,
-		HttpOnly: t.cfg.HTTPOnly,
-		Secure:   t.cfg.Secure,
-		SameSite: t.cfg.SameSite,
-		Expires:  pair.RefreshToken.ExpiredAt,
-		MaxAge:   maxAgeFrom(pair.RefreshToken.ExpiredAt),
-	})
+	if pair.RefreshToken.Value != "" {
+		http.SetCookie(w, &http.Cookie{
+			Name:     t.cfg.RefreshCookieName,
+			Value:    pair.RefreshToken.Value,
+			Path:     t.cfg.Path,
+			Domain:   t.cfg.Domain,
+			HttpOnly: t.cfg.HTTPOnly,
+			Secure:   t.cfg.Secure,
+			SameSite: t.cfg.SameSite,
+			Expires:  pair.RefreshToken.ExpiredAt,
+			MaxAge:   maxAgeFrom(pair.RefreshToken.ExpiredAt),
+		})
+	}
 
 	return nil
 }

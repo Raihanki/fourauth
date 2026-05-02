@@ -31,7 +31,6 @@ type loginRequest struct {
 }
 
 // Register handles user registration.
-// Expects JSON body: {"email", "password", "name", "role"}
 func (h LocalHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req registerRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

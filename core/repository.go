@@ -12,7 +12,7 @@ type UserRepository interface {
 	// GetByProvider retrieves a user by their external identity provider and provider ID.
 	GetByProvider(ctx context.Context, provider string, providerID string) (User, error)
 	// Create creates a new user in the repository.
-	Create(ctx context.Context, input CreateUserInput) (User, error)
+	Create(ctx context.Context, input UserInput) (User, error)
 	// Update updates an existing user in the repository.
 	Update(ctx context.Context, user User) error
 }

@@ -27,10 +27,11 @@ func TestService_LoginLocal(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			useRefreshToken: true,
 		}
 
 		repo.
@@ -61,10 +62,11 @@ func TestService_LoginLocal(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			useRefreshToken: true,
 		}
 
 		user := testUser{
@@ -101,10 +103,11 @@ func TestService_LoginLocal(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			useRefreshToken: true,
 		}
 
 		emptyHash := ""
@@ -143,10 +146,11 @@ func TestService_LoginLocal(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			useRefreshToken: true,
 		}
 
 		hash := "hashed-password"
@@ -190,10 +194,11 @@ func TestService_LoginLocal(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			useRefreshToken: true,
 		}
 
 		hash := "hashed-password"
@@ -247,10 +252,11 @@ func TestService_LoginLocal(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			useRefreshToken: true,
 		}
 
 		hash := "hashed-password"
@@ -312,10 +318,11 @@ func TestService_LoginLocal(t *testing.T) {
 				AccessTokenTTL:  15 * time.Minute,
 				RefreshTokenTTL: 24 * time.Hour,
 			},
-			repo:        repo,
-			refreshRepo: refreshRepo,
-			issuer:      issuer,
-			local:       local,
+			repo:            repo,
+			refreshRepo:     refreshRepo,
+			issuer:          issuer,
+			local:           local,
+			useRefreshToken: true,
 		}
 
 		hash := "hashed-password"

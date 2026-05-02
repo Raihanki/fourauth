@@ -35,6 +35,7 @@ type options struct {
 
 	enableLocal  bool
 	enableGoogle bool
+	enableRefreshToken bool
 }
 
 func defaultOptions() *options {
@@ -43,6 +44,7 @@ func defaultOptions() *options {
 	return &options{
 		tokenCfg:  core.DefaultTokenConfig(),
 		cookieCfg: &cookieCfg,
+		enableRefreshToken: true,
 	}
 }
 
@@ -56,10 +58,17 @@ func WithUserRepository(repo core.UserRepository) Option {
 }
 
 // WithRefreshTokenRepository sets the refresh token repository.
-// Required.
+// Required for default, use WithoutRefreshToken to disable.
 func WithRefreshTokenRepository(repo core.RefreshTokenRepository) Option {
 	return func(o *options) error {
 		o.refreshRepo = repo
+		return nil
+	}
+}
+
+func WithoutRefreshToken() Option {
+	return func(o *options) error {
+		o.enableRefreshToken = false
 		return nil
 	}
 }
@@ -165,7 +174,7 @@ func validateOptions(o *options) error {
 		return errors.New("fourauth: user repository is required")
 	}
 
-	if o.refreshRepo == nil {
+	if o.refreshRepo == nil && o.enableRefreshToken {
 		return errors.New("fourauth: refresh token repository is required")
 	}
 

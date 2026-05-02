@@ -15,7 +15,7 @@ type Token = core.Token
 type TokenPair = core.TokenPair
 type AuthResult = core.AuthResult
 type ExternalIdentity = core.ExternalIdentity
-type CreateUserInput = core.CreateUserInput
+type UserInput = core.UserInput
 type RefreshTokenRecord = core.RefreshTokenRecord
 
 type TokenConfig = core.TokenConfig
