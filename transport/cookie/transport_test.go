@@ -192,7 +192,7 @@ func TestTransport_SetInsecure(t *testing.T) {
 
 	for _, c := range cookies {
 		assert.False(t, c.Secure, "cookie %s should not be Secure after SetInsecure", c.Name)
-		assert.False(t, c.HttpOnly, "cookie %s should not be HttpOnly after SetInsecure", c.Name)
+		assert.True(t, c.HttpOnly, "cookie %s should always be HttpOnly", c.Name)
 	}
 }
 

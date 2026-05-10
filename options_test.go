@@ -74,9 +74,9 @@ func TestWithInsecureCookies_BeforeWithCookieTransport(t *testing.T) {
 	refresh := cookieByName(t, res, "refresh_token")
 
 	assert.False(t, access.Secure, "access cookie should not be Secure")
-	assert.False(t, access.HttpOnly, "access cookie should not be HttpOnly")
+	assert.True(t, access.HttpOnly, "access cookie should always be HttpOnly")
 	assert.False(t, refresh.Secure, "refresh cookie should not be Secure")
-	assert.False(t, refresh.HttpOnly, "refresh cookie should not be HttpOnly")
+	assert.True(t, refresh.HttpOnly, "refresh cookie should always be HttpOnly")
 }
 
 func TestWithInsecureCookies_AfterWithCookieTransport(t *testing.T) {
@@ -110,9 +110,9 @@ func TestWithInsecureCookies_AfterWithCookieTransport(t *testing.T) {
 	refresh := cookieByName(t, res, "refresh_token")
 
 	assert.False(t, access.Secure, "access cookie should not be Secure")
-	assert.False(t, access.HttpOnly, "access cookie should not be HttpOnly")
+	assert.True(t, access.HttpOnly, "access cookie should always be HttpOnly")
 	assert.False(t, refresh.Secure, "refresh cookie should not be Secure")
-	assert.False(t, refresh.HttpOnly, "refresh cookie should not be HttpOnly")
+	assert.True(t, refresh.HttpOnly, "refresh cookie should always be HttpOnly")
 }
 
 func TestWithInsecureCookies_DefaultTransport(t *testing.T) {
@@ -145,9 +145,9 @@ func TestWithInsecureCookies_DefaultTransport(t *testing.T) {
 	refresh := cookieByName(t, res, "refresh_token")
 
 	assert.False(t, access.Secure, "access cookie should not be Secure")
-	assert.False(t, access.HttpOnly, "access cookie should not be HttpOnly")
+	assert.True(t, access.HttpOnly, "access cookie should always be HttpOnly")
 	assert.False(t, refresh.Secure, "refresh cookie should not be Secure")
-	assert.False(t, refresh.HttpOnly, "refresh cookie should not be HttpOnly")
+	assert.True(t, refresh.HttpOnly, "refresh cookie should always be HttpOnly")
 }
 
 func TestWithoutInsecureCookies_DefaultsToSecure(t *testing.T) {

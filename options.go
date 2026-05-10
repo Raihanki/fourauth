@@ -115,9 +115,10 @@ func WithBearerTransport() Option {
 	}
 }
 
-// WithInsecureCookies disables Secure and HttpOnly flags on auth cookies.
+// WithInsecureCookies disables the Secure flag on auth cookies.
 // This is useful for local development over HTTP (e.g. localhost).
 // NOT recommended for production use.
+// HttpOnly is always kept true to prevent XSS access to cookies.
 func WithInsecureCookies() Option {
 	return func(o *options) error {
 		o.insecureCookies = true
@@ -224,7 +225,6 @@ func finalizeOptions(o *options) error {
 	if o.insecureCookies {
 		if o.cookieCfg != nil {
 			o.cookieCfg.Secure = false
-			o.cookieCfg.HTTPOnly = false
 		}
 		if ct, ok := o.transport.(*cookietransport.Transport); ok {
 			ct.SetInsecure()
