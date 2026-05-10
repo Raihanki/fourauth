@@ -2,7 +2,6 @@
 *.so
 *.dylib
 *.out
-test/integrations/*
 
 go.work
 go.work.sum
