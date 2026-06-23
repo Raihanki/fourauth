@@ -17,6 +17,10 @@ type GoogleHandler struct {
 	State *google.StateStore
 	// Transport is the token transport.
 	Transport transportpkg.Transport
+	// FrontendRedirectURL is the URL to redirect to after a successful callback.
+	// When set, the caller is redirected instead of receiving a 200 response.
+	// Only applies when using cookie transport.
+	FrontendRedirectURL string
 }
 
 // Redirect redirects the user to Google for authentication.
@@ -63,6 +67,10 @@ func (h GoogleHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	case core.TransportKindCookie:
 		if err := h.Transport.WriteTokens(w, result.Tokens); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if h.FrontendRedirectURL != "" {
+			http.Redirect(w, r, h.FrontendRedirectURL, http.StatusTemporaryRedirect)
 			return
 		}
 		w.WriteHeader(http.StatusOK)
