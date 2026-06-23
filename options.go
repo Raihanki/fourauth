@@ -33,6 +33,8 @@ type options struct {
 	googleProvider provider.ExternalProvider
 	hasher         localprovider.Hasher
 
+	googleFrontendRedirect string
+
 	enableLocal        bool
 	enableGoogle       bool
 	enableRefreshToken bool
@@ -168,6 +170,16 @@ func WithGoogleProvider(p *googleprovider.Provider) Option {
 	return func(o *options) error {
 		o.enableGoogle = true
 		o.googleProvider = p
+		return nil
+	}
+}
+
+// WithGoogleFrontendRedirect sets the URL to redirect to after a successful
+// Google OAuth callback. When set, the callback handler redirects the browser
+// to this URL after setting auth cookies. Only applies with cookie transport.
+func WithGoogleFrontendRedirect(url string) Option {
+	return func(o *options) error {
+		o.googleFrontendRedirect = url
 		return nil
 	}
 }

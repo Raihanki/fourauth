@@ -68,9 +68,10 @@ func New(opts ...Option) (*Auth, error) {
 	)
 
 	googleHandler := &handlerpkg.GoogleHandler{
-		Service:   svc,
-		State:     o.googleState,
-		Transport: o.transport,
+		Service:             svc,
+		State:               o.googleState,
+		Transport:           o.transport,
+		FrontendRedirectURL: o.googleFrontendRedirect,
 	}
 
 	localHandler := &handlerpkg.LocalHandler{
